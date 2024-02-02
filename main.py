@@ -17,21 +17,28 @@ urls = {
     "https://animeheaven.me/": [["a", "c"], ["a", "c"]],
 }
 
-animes_dict = {}
+def create_dict():
 
-for key,values in urls.items():
+    animes_dict = {}
+    for key,values in urls.items():
 
-    r = requests.get(key)
-    soup = BeautifulSoup(r.text, 'html5lib')
-    anime_list = []
+        r = requests.get(key)
+        soup = BeautifulSoup(r.text, 'html5lib')
+        anime_list = []
 
-    for title, link in zip((soup.find_all(values[0][0], class_=values[0][1])), (soup.find_all(values[1][0], class_=values[1][1]))):
-        anime_list.append([title.text, f"{key}{link['href']}"])
+        for title, link in zip((soup.find_all(values[0][0], class_=values[0][1])), (soup.find_all(values[1][0], class_=values[1][1]))):
+            anime_list.append([title.text, f"{key}{link['href']}"])
 
-    animes_dict[key] = anime_list
+        animes_dict[key] = anime_list
+    return animes_dict
 
-for key, values in animes_dict.items():
-    print(key)
-    for value in values:
-        print(value[0]+"-----"+value[1])
-    print("--------------")
+
+def main(dict):
+    for key, values in dict.items():
+        print(key)
+        for value in values:
+            print(value[0]+"-----"+value[1])
+        print("--------------")
+
+if __name__ == "__main__":
+    main(create_dict())
